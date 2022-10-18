@@ -140,7 +140,64 @@ void rotateMatrix90(vector<vector<int>>& matrix) {
    }
 }
 
+void zeroMatrix(vector<vector<int>>& matrix) {
+    bool fillFirstRow = false, fillFirstCol = false;
 
+    for (int i = 0; i < matrix.size(); ++i) {
+        if (matrix[i][0] == 0) {
+            fillFirstCol = true;
+            break;
+        }
+    }
+
+    for (int i = 0; i < matrix[0].size(); ++i) {
+        if (matrix[0][i] == 0) {
+            fillFirstRow = true;
+        }
+    }
+
+    for (int i = 0; i < matrix.size(); ++i) {
+        for (int j = 0; j < matrix[0].size(); ++j) {
+            if (matrix[i][j] == 0) {
+                matrix[i][0] = 0;
+                matrix[0][j] = 0;
+            }         
+        }
+    }
+
+    for (int i = 1; i < matrix.size(); ++i) {
+        if (matrix[i][0] == 0) {
+            for (int j = 0; j < matrix[0].size(); ++j) {
+                matrix[i][j] = 0;
+            }
+        }
+    }
+
+    for (int i = 1; i < matrix[0].size(); ++i) {
+        if (matrix[0][i] == 0) {
+            for (int j = 0; j < matrix.size(); ++j) {
+                matrix[j][i] = 0;
+            }
+        }
+    }
+
+    if (fillFirstRow)
+        for (int i = 0; i < matrix[0].size(); ++i) {
+            matrix[0][i] = 0;
+        }
+    if (fillFirstCol) 
+        for (int i = 0; i < matrix.size(); ++i) {
+            matrix[i][0] = 0;
+        }
+}
+
+bool isStringRotation(string s1, string s2) {
+    if (s1.length() == s2.length() && s1.length() > 0) {
+        string comb = s1 + s1;
+        return comb.find(s2) != string::npos;
+    }
+    return false;
+}
 
 int main() {
 	// isUnique test
@@ -160,7 +217,7 @@ int main() {
     cout << endl << "URLify test:" << endl;
     string url = "Mr John Smith    ";
     cout << URLify(url) << endl;
-
+    
     // checkPalindromePerm test
     cout << endl << "checkPalindromePerm test:" << endl;
     string palinPermStr = "Tact Coa";
@@ -189,6 +246,25 @@ int main() {
         }
         cout << endl;
     }
+
+    // zeroMatrix test
+    cout << endl << "zeroMatrix test:" << endl;
+    vector<vector<int>> matrix1 {{1, 1, 1}, {1, 0, 1}, {1, 1, 1}};
+    
+    zeroMatrix(matrix1);
+    for (int i = 0; i < matrix1.size(); ++i) {
+        for (int j = 0; j < matrix1[0].size(); ++j) {
+            cout << matrix1[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    // isStringRotation test
+    cout << endl << "isStringRotation test:" << endl;
+    string notRotated = "waterbottle";
+    string rotated = "erbottlewat";
+
+    cout << "is string rotated: "<< boolalpha << isStringRotation(notRotated, rotated) << endl; 
 
     return 0;
 }
