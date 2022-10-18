@@ -16,6 +16,7 @@ class LinkedList {
 private:
     Node *head = nullptr;
 public:
+    LinkedList(Node *node): head{node} {}
     LinkedList(vector<string> input) {
         for (int i = input.size() - 1; i >= 0; --i) {
             pushFront(new Node{input[i]});
@@ -76,11 +77,45 @@ Node* findKFromLast(Node* head, int k, int &i) {
     return nd;
 }
 
+Node* deleteMiddleNode(Node *head) {
+    if (head == nullptr || head->next == nullptr) return head; 
+    Node *slow = head, *fast = head->next, *prev = nullptr; 
+
+    while (fast != nullptr && fast->next != nullptr) {
+        prev = slow;
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    prev->next = slow->next;
+    return slow;
+}
+
+Node* partition(Node* node, string val) {
+    Node *head = node;
+    Node *tail = node;
+
+    while (node != nullptr) {
+        Node* next = node->next;
+        if (stoi(node->val) < stoi(val)) {
+            node->next = head;
+            head = node;
+        } else {
+            tail->next = node;
+            tail = node;
+        }
+        node = next;
+    }
+    tail->next = nullptr;
+
+    return head;
+}
+
 // driver code
 int main() {
     // deleteDups test
     cout << endl << "deleteDups test:" << endl;
-    vector<string> input1 = {"1", "1", "2", "2", "1", "3", "4"};
+    vector<string> input1 = {"1", "1", "2", "2", "1", "3", "4", "5"};
     LinkedList list1(input1);
     cout << "before: "; 
     list1.print();
@@ -93,5 +128,18 @@ int main() {
     int i = 0, k = 2;
     Node *kElem = findKFromLast(list1.front(), k, i);
     cout << k << " elems from last is: " << kElem->val << endl;
+
+    // deleteMiddleNode test
+    cout << endl << "deleteMiddleNode test:" << endl;
+    Node *deletedNode = deleteMiddleNode(list1.front());
+    cout << "Deleted Node: " << deletedNode->val << endl;
+    list1.print();
+    
+    // partition test
+    cout << endl << "partition test:" << endl;
+    Node *newListHead = partition(list1.front(), "4");
+    LinkedList list2(newListHead);
+    list2.print();
+
     return 0;
 }
