@@ -6,7 +6,7 @@ using namespace std;
 struct Elem {
     int val;
     int curMin;
-    Elem(int v, int m): val{v}, curMin{m} {} 
+    Elem(int v, int m): val(v), curMin(m) {} 
 };
 
 class MinStack {
@@ -28,11 +28,11 @@ public:
 };
 
 class StackOfPlates {
-    vector<vector<int>> stacks;
+    vector<vector<int> > stacks;
     int threshold;
-    int stackPtr = 0;
+    int stackPtr;
 public:
-    StackOfPlates(int threshold): stacks(1, vector<int>()), threshold{threshold} {}
+    StackOfPlates(int threshold): stacks(1, vector<int>()), threshold{threshold}, stackPtr{0} {}
     void push(int val) {
         if (stacks[stackPtr].size() >= threshold) {
             stacks.push_back(vector<int>());
@@ -89,6 +89,38 @@ public:
     }
 };
 
+class SortStack {
+    vector<int> sortedStack;
+public:
+    SortStack() {}
+    void push(int val) {
+        sortedStack.push_back(val);
+    }
+    void pop() {
+        sortedStack.pop_back();
+    }
+    int peek() {
+        return sortedStack.back(); 
+    }
+    void sort() {
+        vector<int> tmpStack;
+        while (!sortedStack.empty()) {
+            int tmp = sortedStack.back();
+            sortedStack.pop_back();
+            while (!tmpStack.empty() && tmpStack.back() > tmp) {
+                sortedStack.push_back(tmpStack.back());
+                tmpStack.pop_back();
+            }
+            tmpStack.push_back(tmp);
+        }
+        
+        while (!tmpStack.empty()) {
+            sortedStack.push_back(tmpStack.back());
+            tmpStack.pop_back();
+        }
+    }
+}; 
+
 int main() {
     cout << endl << "Min Stack test:" << endl;  
     MinStack minStack{};
@@ -98,7 +130,7 @@ int main() {
     cout << "min val on the stack: " << minStack.getMin() << endl;
     
     cout << endl << "Stack of plates test:" << endl;
-    StackOfPlates stacks{5};
+    StackOfPlates stacks(5);
     stacks.push(1);
     stacks.push(2);
     stacks.push(3);
@@ -113,4 +145,16 @@ int main() {
     qvc.queueBack(4);
     qvc.dequeFront();
     cout << "front of queue: " << qvc.front() << endl;
+    
+    cout << endl << "SortStack test:" << endl;
+    SortStack sortStack{};
+    sortStack.push(3);
+    sortStack.push(1);
+    sortStack.push(4);
+    sortStack.sort();
+    for (int i = 0; i < 3; ++i) {
+        cout << " " << sortStack.peek();
+        sortStack.pop();
+    }
+    cout << endl;
 }
