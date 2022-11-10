@@ -76,6 +76,26 @@ vector<char> buildOrder(vector<char> projects, vector<pair<char, char>> dependen
     return output;
 }
 
+bool isNodeFound(TreeNode* node, TreeNode* target) {
+    if (!node) return false;
+    if (node == target) return true;
+    bool left = isNodeFound(node->left, target);
+    bool right = isNodeFound(node->right, target);
+    return left || right;
+}
+
+TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+    if (!root || p == root || q == root) return root;
+    bool pInLeft = isNodeFound(root->left, p);
+    bool qInLeft = isNodeFound(root->left, q);
+    if (pInLeft == qInLeft) {
+        if (pInLeft)
+            return lowestCommonAncestor(root->left, p, q); 
+        return lowestCommonAncestor(root->right, p, q);
+    }
+    return root;
+}
+
 int main() {
     cout << endl << "Successor test:" << endl;
     TreeNode *root = new TreeNode{1};
@@ -95,4 +115,7 @@ int main() {
         cout << orderedList[i] << " ";
     }
     cout << endl;
+
+    cout << endl << "Lowest Common Ancestor test:" << endl;
+    
 }
