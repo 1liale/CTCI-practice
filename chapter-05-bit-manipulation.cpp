@@ -53,7 +53,35 @@ int flipBitToWin(unsigned int num) {
 }
 
 void nextNumber(unsigned int num) {
-    
+    cout << "start: " << num << ", " << bitset<16>(num) << endl;
+
+    // set first non-trailing zero bit
+    int i = 0;
+    while (i < 32) {
+        if ((num & (1 << i)) && (num & (2 << i)) == 0) {
+            num |= (2 << i);
+            break;
+        }
+        i++;
+    }
+
+    int onesCount = 0;
+    // remove all ones after it
+    while (i >= 0) {
+        if (num & (1 << i)) {
+            onesCount++;
+            num &= ~(1 << i);
+        }
+        i--;
+    }
+    i = 0;
+    // set the ones in order for min nextNumber
+    while (i < onesCount - 1) {
+        num |= (1 << i);
+        i++;
+    }
+
+    cout << "end: " << num << ", " << bitset<16>(num) << endl;
 }
 
 int main() {
@@ -66,5 +94,8 @@ int main() {
 
     cout << endl << "flipBitToWin test:" <<  endl;
     cout << "11011101111 (1775) has longest 1s sequence of " << flipBitToWin(1775) << " after flipping a bit" << endl;  
+
+    cout << endl << "nextNumber test:" << endl;
+    nextNumber(1775);
 }
 
