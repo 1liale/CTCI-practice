@@ -84,6 +84,14 @@ void nextNumber(unsigned int num) {
     cout << "end: " << num << ", " << bitset<16>(num) << endl;
 }
 
+int conversion(unsigned int a, unsigned int b) {
+    return __builtin_popcount(a ^ b);
+}
+
+int pairwiseSwap(unsigned int num) {
+    return (((num & 0xaaaaaaaa) >> 1) | ((num & 0x55555555) << 1));
+}
+
 int main() {
     cout << endl << "bits insertion test:"<< endl;
     cout << std::bitset<16>(insertion(stoi("10000001101", nullptr, 2), stoi("10011", nullptr, 2), 2, 6)) << endl;
@@ -97,5 +105,13 @@ int main() {
 
     cout << endl << "nextNumber test:" << endl;
     nextNumber(1775);
+
+    cout << endl << "conversion test:" << endl;
+    unsigned int A = 29, B = 15;
+    cout << "Flip " << conversion(A, B) << " bits to go from " << A << " to " << B << endl; 
+
+    cout << endl << "pairwiseSwap test:" << endl;
+    unsigned int swapNum = 23;
+    cout << "swapped: " << bitset<32>(swapNum) << " -> " << bitset<32>(pairwiseSwap(swapNum)) << endl;
 }
 

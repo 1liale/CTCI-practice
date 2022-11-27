@@ -1,0 +1,14 @@
+#!/bin/bash
+
+input="${1}"
+prefix="chapter-"
+suffix=".cpp"
+
+if [[ -z "${input}" ]]; then
+    echo "need to specify cpp file to run"
+    exit 1
+fi
+prefix_removed=${input/#$prefix}
+final=${prefix_removed/%$suffix}
+g++ -std=c++11 $input -o ./build/$final
+exec ./build/$final 
